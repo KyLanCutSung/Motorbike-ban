@@ -1,0 +1,50 @@
+# Log started 2025-05-21 07:03
+# Record of session commands.  Please note that this will
+# likely require editing if it is to be run as a script.
+open "D:\Môn học\Econometrics\project\project\preprocessing_data.csv"
+boxplot  opinion_ban_code own_car --notches 
+corr freqpweek freq_car dist_to_pub own_car own_motob own_bike own_ebike \
+  opinion_ban_code aware_ban_no aware_ban_yes vehic_bus vehic_car \
+  vehic_ebike vehic_moto vehic_taxi vehic_tram vehic_walk fut_veh_car \
+  fut_veh_ebike fut_veh_moto fut_veh_no
+xtab  opinion_ban_code own_car
+qqplot opinion_ban_code
+boxplot freqpweek
+freq freqpweek --plot=display
+freq own_car --plot=display
+freq opinion_ban_code --nbins=3 --plot=display
+# model 1
+logit opinion_ban_code 0 aware_ban_no aware_ban_yes vehic_bus vehic_car \
+  vehic_ebike vehic_moto vehic_taxi vehic_tram vehic_walk fut_veh_car \
+  fut_veh_ebike fut_veh_moto fut_veh_no --p-values
+# model 2
+logit opinion_ban_code 0 freqpweek freq_car dist_to_pub own_car own_motob \
+  own_bike own_ebike aware_ban_no aware_ban_yes vehic_bus vehic_car \
+  vehic_ebike vehic_moto vehic_taxi vehic_tram vehic_walk fut_veh_car \
+  fut_veh_ebike fut_veh_moto fut_veh_no --p-values
+vif
+bkw
+scatters opinion_ban_code ; own_car own_motob own_bike own_ebike \
+  --with-lines
+boxplot  own_car own_motob own_bike own_ebike --notches 
+qqplot opinion_ban_code
+difftest own_car opinion_ban_code --sign
+corr opinion_ban_code own_car --kendall --verbose
+corr opinion_ban_code own_car --kendall
+corr opinion_ban_code own_car --spearman
+runs opinion_ban_code
+difftest own_car opinion_ban_code --signed-rank
+# model 3
+probit opinion_ban_code 0 freqpweek freq_car dist_to_pub own_car \
+  own_motob own_bike own_ebike aware_ban_no aware_ban_yes vehic_bus \
+  vehic_car vehic_ebike vehic_moto vehic_taxi vehic_tram vehic_walk \
+  fut_veh_car fut_veh_ebike fut_veh_moto fut_veh_no --p-values
+# model 4
+logit opinion_ban_code 0 freqpweek freq_car dist_to_pub own_car own_motob \
+  own_bike own_ebike aware_ban_no aware_ban_yes vehic_bus vehic_car \
+  vehic_ebike vehic_moto vehic_taxi vehic_tram vehic_walk fut_veh_car \
+  fut_veh_ebike fut_veh_moto fut_veh_no
+# model 2
+vif
+bkw
+# store "D:\Môn học\Econometrics\project\project\preprocessing_data.gdt" --gzipped=1
